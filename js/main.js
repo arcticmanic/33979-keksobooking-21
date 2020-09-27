@@ -2,7 +2,7 @@
 
 const nearbyAds = [];
 const avatars = [];
-const QUANTITY = 8;
+const QUANTITY_OF_PINS = 8;
 const TITLES = [`Большая уютная квартира`, `Маленькая неуютная квартира`, `Огромный прекрасный дворец`, `Маленький ужасный дворец`, `Красивый гостевой домик`, `Некрасивый негостеприимный домик`, `Уютное бунгало далеко от моря`, `Неуютное бунгало по колено в воде`];
 const ADDRESSES = [`600, 350`, `700, 350`, `500, 350`, `300, 350`, `800, 350`, `600, 450`, `600, 150`, `600, 950`];
 const PRICE_MIN = 500;
@@ -28,8 +28,7 @@ const getRandomIntInRange = function (min, max) {
 
 const getRandomItem = function (arr) {
   let randomElement = getRandomIntInRange(0, arr.length - 1);
-  let randomElementItem = arr[randomElement];
-  return randomElementItem;
+  return arr[randomElement];
 };
 
 const getRandomItemNoRepeat = function (arr) {
@@ -74,7 +73,7 @@ const getRandomPrice = function (min, max) {
   return getRandomIntInRange(min, max).toFixed(2);
 };
 
-generateArrayNoRepeat(avatars, 1, QUANTITY, QUANTITY);
+generateArrayNoRepeat(avatars, 1, QUANTITY_OF_PINS, QUANTITY_OF_PINS);
 
 let map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
@@ -108,7 +107,7 @@ const populateNearbyAds = function (arr, quantity) {
   }
 };
 
-populateNearbyAds(nearbyAds, QUANTITY);
+populateNearbyAds(nearbyAds, QUANTITY_OF_PINS);
 
 const pinList = document.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
