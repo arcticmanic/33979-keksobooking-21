@@ -58,7 +58,6 @@ const getRandomArray = function (arr) {
   return newArray;
 };
 
-
 const getRandomKey = function (obj) {
   let keys = Object.keys(obj);
   return keys[keys.length * Math.random() << 0];
@@ -84,8 +83,22 @@ const getRandomPrice = function (min, max) {
   return getRandomIntInRange(min, max).toFixed(2);
 };
 
-const hide = function (element) {
+const getHide = function (element) {
   element.style.display = `none`;
+};
+
+const filterNodesWithFeatureList = function (arr, featureList) {
+  for (let i = arr.children.length - 1; i >= 0; i--) {
+    let element = arr.children[i];
+    let itemClass = element.className;
+    let isInFeatureList = featureList.some(function (item) {
+      return (itemClass.indexOf(item) > -1);
+    });
+
+    if (!isInFeatureList) {
+      arr.removeChild(element);
+    }
+  }
 };
 
 generateArrayNoRepeat(avatars, 1, QUANTITY_OF_PINS, QUANTITY_OF_PINS);
@@ -164,31 +177,20 @@ const renderCard = function (card) {
   let cardPhoto = cardElement.querySelector(`.popup__photo`);
   let cardAvatar = cardElement.querySelector(`.popup__avatar`);
 
-  cardTitle.textContent = card.offer.title || hide(cardTitle);
-  cardAddress.textContent = card.offer.address || hide(cardAddress);
-  cardPrice.textContent = (card.offer.price) ? `${card.offer.price}₽/ночь` : hide(cardPrice);
-  cardType.textContent = card.offer.type || hide(cardType);
-  cardCapacity.textContent = (card.offer.rooms && card.offer.guests) ? `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : hide(cardCapacity);
-  cardTime.textContent = (card.offer.checkin && card.offer.checkout) ? `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}` : hide(cardTime);
+  cardTitle.textContent = card.offer.title || getHide(cardTitle);
+  cardAddress.textContent = card.offer.address || getHide(cardAddress);
+  cardPrice.textContent = (card.offer.price) ? `${card.offer.price}₽/ночь` : getHide(cardPrice);
+  cardType.textContent = card.offer.type || getHide(cardType);
+  cardCapacity.textContent = (card.offer.rooms && card.offer.guests) ? `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : getHide(cardCapacity);
+  cardTime.textContent = (card.offer.checkin && card.offer.checkout) ? `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}` : getHide(cardTime);
 
   if (card.offer.features) {
-    for (let i = cardFeatures.children.length - 1; i >= 0; i--) {
-      let cardFeature = cardFeatures.children[i];
-      let cardClass = cardFeature.className;
-      let features = card.offer.features;
-      let isInFeatureList = features.some(function (item) {
-        return (cardClass.indexOf(item) > -1);
-      });
-
-      if (!isInFeatureList) {
-        cardFeature.parentNode.removeChild(cardFeature);
-      }
-    }
+    filterNodesWithFeatureList(cardFeatures, card.offer.features);
   } else {
-    hide(cardFeatures);
+    getHide(cardFeatures);
   }
 
-  cardDescription.textContent = card.offer.description || hide(cardDescription);
+  cardDescription.textContent = card.offer.description || getHide(cardDescription);
 
   if (card.offer.photos) {
     cardPhoto.src = card.offer.photos[0];
@@ -199,10 +201,10 @@ const renderCard = function (card) {
       cardPhotos.appendChild(copyPhoto);
     }
   } else {
-    hide(cardPhotos);
+    getHide(cardPhotos);
   }
 
-  cardAvatar.src = card.author.avatar || hide(cardAvatar);
+  cardAvatar.src = card.author.avatar || getHide(cardAvatar);
 
   return cardElement;
 };
