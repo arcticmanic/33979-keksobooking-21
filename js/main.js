@@ -26,6 +26,7 @@ const Y_MAX = 630;
 const X_MAX = 1200;
 // const PIN_OFFSET_X = 25;
 // const PIN_OFFSET_Y = 35;
+const SELECT_ROOMS_MAX_VALUE = 100;
 
 // const getRandomIntInRange = function (min, max) {
 //   min = Math.ceil(min);
@@ -258,19 +259,26 @@ const getPinCoordinates = function () {
 
 addressAdForm.value = `${X_MAX / 2}, ${Y_MAX / 2}`;
 
-pinMain.addEventListener(`mousedown`, function (evt) {
+const pinMainMousedownHandler = function (evt) {
   if (evt.button === 0) {
     makeProjectActive();
     addressAdForm.value = getPinCoordinates();
+    pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
+    pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
   }
-});
+};
 
-pinMain.addEventListener(`keydown`, function (evt) {
+const pinMainKeydownHandler = function (evt) {
   if (evt.keyCode === 13) {
     makeProjectActive();
     addressAdForm.value = getPinCoordinates();
+    pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
+    pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
   }
-});
+};
+
+pinMain.addEventListener(`mousedown`, pinMainMousedownHandler);
+pinMain.addEventListener(`keydown`, pinMainKeydownHandler);
 
 const adFormChangeHandler = function (evt) {
   if (evt.target && (evt.target.matches(`#room_number`) || evt.target.matches(`#capacity`))) {
@@ -293,10 +301,10 @@ const setRoomCapacityValidity = function () {
   if (rooms < capacity) {
     roomNumberAdForm.setCustomValidity(`Мест для всех не хватит!`);
     capacityAdForm.setCustomValidity(`Мест для всех не хватит!`);
-  } else if ((rooms === 100) && (capacity !== 0)) {
+  } else if ((rooms === SELECT_ROOMS_MAX_VALUE) && (capacity !== 0)) {
     roomNumberAdForm.setCustomValidity(`Не для гостей!`);
     capacityAdForm.setCustomValidity(`Не для гостей!`);
-  } else if ((capacity === 0) && (rooms !== 100)) {
+  } else if ((capacity === 0) && (rooms !== SELECT_ROOMS_MAX_VALUE)) {
     roomNumberAdForm.setCustomValidity(`Нужно больше комнат!`);
     capacityAdForm.setCustomValidity(`Нужно больше комнат!`);
   } else {
