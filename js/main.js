@@ -328,14 +328,14 @@ const adFormChangeHandler = function (evt) {
   }
 };
 
-const adFormSubmitHandler = function (evt) {
-  setRoomCapacityValidity();
-  setPriceValidity();
-  if (!adForm.checkValidity()) {
-    evt.preventDefault();
-    adForm.reportValidity();
-  }
-};
+// const adFormSubmitHandler = function (evt) {
+//   setRoomCapacityValidity();
+//   setPriceValidity();
+//   if (!adForm.checkValidity()) {
+//     evt.preventDefault();
+//     adForm.reportValidity();
+//   }
+// };
 
 const adFormPriceHandler = function () {
   setPriceValidity();
@@ -380,7 +380,7 @@ const setPriceValidity = function () {
 
 priceAdForm.addEventListener(`input`, adFormPriceHandler);
 adForm.addEventListener(`change`, adFormChangeHandler);
-adForm.addEventListener(`submit`, adFormSubmitHandler);
+// adForm.addEventListener(`submit`, adFormSubmitHandler);
 
 // Popup Events
 
