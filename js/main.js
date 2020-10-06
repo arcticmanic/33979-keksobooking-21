@@ -249,6 +249,8 @@ const roomNumberAdForm = adForm.querySelector(`#room_number`);
 const capacityAdForm = adForm.querySelector(`#capacity`);
 const typeAdForm = adForm.querySelector(`#type`);
 const priceAdForm = adForm.querySelector(`#price`);
+const timeInAdForm = adForm.querySelector(`#timein`);
+const timeOutAdForm = adForm.querySelector(`#timeout`);
 
 const changeFormFieldsStatus = function (form, isDisabled) {
   let fields = form.children;
@@ -315,6 +317,10 @@ const adFormChangeHandler = function (evt) {
   } else if (evt.target && (evt.target.matches(`#type`))) {
     setPriceValidity();
     priceAdForm.reportValidity();
+  } else if (evt.target && (evt.target.matches(`#timein`))) {
+    timeOutAdForm.value = evt.target.value;
+  } else if (evt.target && (evt.target.matches(`#timeout`))) {
+    timeInAdForm.value = evt.target.value;
   }
 };
 
@@ -327,7 +333,7 @@ const adFormSubmitHandler = function (evt) {
   }
 };
 
-const adFormPriceHandler = function (evt) {
+const adFormPriceHandler = function () {
   setPriceValidity();
   priceAdForm.reportValidity();
 };
