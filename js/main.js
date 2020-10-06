@@ -140,47 +140,6 @@ populateNearbyAds(nearbyAds, QUANTITY_OF_PINS);
 
 const pinList = map.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-
-const clearCards = function () {
-  let mapCards = map.querySelectorAll(`.map__card`);
-  for (let i = mapCards.length - 1; i >= 0; i--) {
-    let mapCard = mapCards[i];
-    mapCard.parentNode.removeChild(mapCard);
-  }
-};
-
-const insertCard = function (index) {
-  const fragment = document.createDocumentFragment();
-  fragment.appendChild(renderCard(nearbyAds[index]));
-  map.insertBefore(fragment, filters);
-};
-
-const pinClickHandler = function (index) {
-  clearCards();
-  insertCard(index);
-};
-
-const renderPin = function (pin, index) {
-  let pinElement = pinTemplate.cloneNode(true);
-  let pinImage = pinElement.querySelector(`img`);
-  pinElement.style.left = `${pin.location.x - PIN_OFFSET_X}px`;
-  pinElement.style.top = `${pin.location.y - PIN_OFFSET_Y}px`;
-  pinImage.src = pin.author.avatar;
-  pinImage.alt = pin.offer.title;
-  pinElement.addEventListener(`click`, pinClickHandler(index));
-  return pinElement;
-};
-
-const insertPins = function () {
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < nearbyAds.length; i++) {
-    fragment.appendChild(renderPin(nearbyAds[i], i));
-  }
-  pinList.appendChild(fragment);
-};
-
-insertPins();
-
 const filters = map.querySelector(`.map__filters-container`);
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
@@ -197,6 +156,7 @@ const renderCard = function (card) {
   let cardPhotos = cardElement.querySelector(`.popup__photos`);
   let cardPhoto = cardElement.querySelector(`.popup__photo`);
   let cardAvatar = cardElement.querySelector(`.popup__avatar`);
+  let cardClose = cardElement.querySelector(`.popup__close`);
 
   cardTitle.textContent = card.offer.title || getHide(cardTitle);
   cardAddress.textContent = card.offer.address || getHide(cardAddress);
@@ -204,6 +164,18 @@ const renderCard = function (card) {
   cardType.textContent = card.offer.type || getHide(cardType);
   cardCapacity.textContent = (card.offer.rooms && card.offer.guests) ? `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : getHide(cardCapacity);
   cardTime.textContent = (card.offer.checkin && card.offer.checkout) ? `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}` : getHide(cardTime);
+
+  cardClose.addEventListener(`click`, function () {
+    closePopup(cardElement);
+  });
+
+  cardClose.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Enter`) {
+      closePopup(cardElement);
+    }
+  });
+
+  document.addEventListener(`keydown`, popupEscPressHandler);
 
   if (card.offer.features) {
     filterNodesWithFeatureList(cardFeatures, card.offer.features);
@@ -230,11 +202,53 @@ const renderCard = function (card) {
   return cardElement;
 };
 
+const clearCards = function () {
+  let mapCards = map.querySelectorAll(`.map__card`);
+  for (let i = mapCards.length - 1; i >= 0; i--) {
+    let mapCard = mapCards[i];
+    mapCard.parentNode.removeChild(mapCard);
+  }
+};
+
+const insertCard = function (index) {
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(renderCard(nearbyAds[index]));
+  map.insertBefore(fragment, filters);
+};
+
+const pinClickHandler = function (index) {
+  return function () {
+    clearCards();
+    insertCard(index);
+  };
+};
+
+const renderPin = function (pin, index) {
+  let pinElement = pinTemplate.cloneNode(true);
+  let pinImage = pinElement.querySelector(`img`);
+  pinElement.style.left = `${pin.location.x - PIN_OFFSET_X}px`;
+  pinElement.style.top = `${pin.location.y - PIN_OFFSET_Y}px`;
+  pinImage.src = pin.author.avatar;
+  pinImage.alt = pin.offer.title;
+  pinElement.addEventListener(`click`, pinClickHandler(index));
+  return pinElement;
+};
+
+const insertPins = function () {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < nearbyAds.length; i++) {
+    fragment.appendChild(renderPin(nearbyAds[i], i));
+  }
+  pinList.appendChild(fragment);
+};
+
 const adForm = document.querySelector(`.ad-form`);
 const filterForm = document.querySelector(`.map__filters`);
 const addressAdForm = adForm.querySelector(`#address`);
 const roomNumberAdForm = adForm.querySelector(`#room_number`);
 const capacityAdForm = adForm.querySelector(`#capacity`);
+const typeAdForm = adForm.querySelector(`#type`);
+const priceAdForm = adForm.querySelector(`#price`);
 
 const changeFormFieldsStatus = function (form, isDisabled) {
   let fields = form.children;
@@ -274,6 +288,7 @@ addressAdForm.value = `${X_MAX / 2}, ${Y_MAX / 2}`;
 const pinMainMousedownHandler = function (evt) {
   if (evt.button === 0) {
     makeProjectActive();
+    insertPins();
     addressAdForm.value = getPinCoordinates();
     pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
     pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
@@ -283,6 +298,7 @@ const pinMainMousedownHandler = function (evt) {
 const pinMainKeydownHandler = function (evt) {
   if (evt.keyCode === 13) {
     makeProjectActive();
+    insertPins();
     addressAdForm.value = getPinCoordinates();
     pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
     pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
@@ -296,16 +312,27 @@ const adFormChangeHandler = function (evt) {
   if (evt.target && (evt.target.matches(`#room_number`) || evt.target.matches(`#capacity`))) {
     setRoomCapacityValidity();
     evt.target.reportValidity();
+  } else if (evt.target && (evt.target.matches(`#type`))) {
+    setPriceValidity();
+    priceAdForm.reportValidity();
   }
 };
 
 const adFormSubmitHandler = function (evt) {
   setRoomCapacityValidity();
+  setPriceValidity();
   if (!adForm.checkValidity()) {
     evt.preventDefault();
     adForm.reportValidity();
   }
 };
+
+const adFormPriceHandler = function (evt) {
+  setPriceValidity();
+  priceAdForm.reportValidity();
+};
+
+// Validation
 
 const setRoomCapacityValidity = function () {
   let rooms = Number(roomNumberAdForm.value);
@@ -325,5 +352,41 @@ const setRoomCapacityValidity = function () {
   }
 };
 
+const setPriceValidity = function () {
+  const PRICE_BUNGALOW_MIN = 0;
+  const PRICE_FLAT_MIN = 1000;
+  const PRICE_HOUSE_MIN = 5000;
+  const PRICE_PALACE_MIN = 10000;
+  let type = typeAdForm.value;
+  let price = Number(priceAdForm.value);
+  if (type === `bungalow` && (price < PRICE_BUNGALOW_MIN)) {
+    priceAdForm.setCustomValidity(`Минимальная цена за ночь ${PRICE_BUNGALOW_MIN}`);
+  } else if (type === `flat` && (price < PRICE_FLAT_MIN)) {
+    priceAdForm.setCustomValidity(`Минимальная цена за ночь ${PRICE_FLAT_MIN}`);
+  } else if (type === `house` && (price < PRICE_HOUSE_MIN)) {
+    priceAdForm.setCustomValidity(`Минимальная цена за ночь ${PRICE_HOUSE_MIN}`);
+  } else if (type === `palace` && (price < PRICE_PALACE_MIN)) {
+    priceAdForm.setCustomValidity(`Минимальная цена за ночь ${PRICE_PALACE_MIN}`);
+  } else {
+    priceAdForm.setCustomValidity(``);
+  }
+};
+
+priceAdForm.addEventListener(`input`, adFormPriceHandler);
 adForm.addEventListener(`change`, adFormChangeHandler);
 adForm.addEventListener(`submit`, adFormSubmitHandler);
+
+// Popup Events
+
+const closePopup = function (popup) {
+  popup.classList.add(`hidden`);
+  document.removeEventListener(`keydown`, popupEscPressHandler);
+};
+
+const popupEscPressHandler = function (evt) {
+  let popup = document.querySelector(`.map__card`); // TODO: как передать параметр в хэндлер, а потом удалить его?
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    closePopup(popup);
+  }
+};
