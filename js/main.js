@@ -28,6 +28,10 @@ const X_MAX = 1200;
 const PIN_OFFSET_X = 25;
 const PIN_OFFSET_Y = 35;
 const SELECT_ROOMS_MAX_VALUE = 100;
+const PRICE_BUNGALOW_MIN = 0;
+const PRICE_FLAT_MIN = 1000;
+const PRICE_HOUSE_MIN = 5000;
+const PRICE_PALACE_MIN = 10000;
 
 const getRandomIntInRange = function (min, max) {
   min = Math.ceil(min);
@@ -359,10 +363,6 @@ const setRoomCapacityValidity = function () {
 };
 
 const setPriceValidity = function () {
-  const PRICE_BUNGALOW_MIN = 0;
-  const PRICE_FLAT_MIN = 1000;
-  const PRICE_HOUSE_MIN = 5000;
-  const PRICE_PALACE_MIN = 10000;
   let type = typeAdForm.value;
   let price = Number(priceAdForm.value);
   if (type === `bungalow` && (price < PRICE_BUNGALOW_MIN)) {
@@ -385,12 +385,12 @@ adForm.addEventListener(`submit`, adFormSubmitHandler);
 // Popup Events
 
 const closePopup = function (popup) {
-  popup.classList.add(`hidden`);
+  popup.remove();
   document.removeEventListener(`keydown`, popupEscPressHandler);
 };
 
 const popupEscPressHandler = function (evt) {
-  let popup = document.querySelector(`.map__card`); // TODO: как передать параметр в хэндлер, а потом удалить его?
+  let popup = document.querySelector(`.map__card`);
   if (evt.key === `Escape`) {
     evt.preventDefault();
     closePopup(popup);
