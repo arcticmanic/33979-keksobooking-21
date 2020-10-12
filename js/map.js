@@ -13,7 +13,7 @@
       let popup = document.querySelector(`.map__card`);
       if (evt.key === `Escape`) {
         evt.preventDefault();
-        this.closePopup(popup);
+        window.map.closePopup(popup);
       }
     },
     insertCard(index) {

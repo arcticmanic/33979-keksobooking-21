@@ -22,7 +22,7 @@
   };
 
   const pinMainKeydownHandler = function (evt) {
-    if (evt.keyCode === 13) {
+    if (evt.key === `Enter`) {
       window.main.makeProjectActive();
       window.map.insertPins();
       window.form.addressAdForm.value = window.pin.getPinCoordinates();
