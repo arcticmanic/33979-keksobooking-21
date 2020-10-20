@@ -25,6 +25,8 @@
   const X_MAX = 1200;
   const PIN_OFFSET_X = 25;
   const PIN_OFFSET_Y = 35;
+  const PIN_MAIN_OFFSET_X = 32;
+  const PIN_MAIN_OFFSET_Y = 81;
   const SELECT_ROOMS_MAX_VALUE = 100;
   const PRICE_BUNGALOW_MIN = 0;
   const PRICE_FLAT_MIN = 1000;
@@ -63,29 +65,31 @@
   };
 
   window.data = {
-    pinQuantity: PIN_QUANTITY,
-    titles: TITLES,
-    addresses: ADDRESSES,
-    priceMin: PRICE_MIN,
-    priceMax: PRICE_MAX,
-    types: TYPES,
-    roomsMax: ROOMS_MAX,
-    guestsMax: GUESTS_MAX,
-    checkinTimes: CHECKIN_TIMES,
-    checkoutTimes: CHECKOUT_TIMES,
-    features: FEATURES,
-    descriptions: DESCRIPTIONS,
-    photos: PHOTOS,
-    yMin: Y_MIN,
-    yMax: Y_MAX,
-    xMin: X_MIN,
-    xMax: X_MAX,
-    pinOffsetX: PIN_OFFSET_X,
-    pinOffsetY: PIN_OFFSET_Y,
-    selectRoomsMaxValue: SELECT_ROOMS_MAX_VALUE,
-    priceBungalowMin: PRICE_BUNGALOW_MIN,
-    priceFlatMin: PRICE_FLAT_MIN,
-    priceHouseMin: PRICE_HOUSE_MIN,
+    PIN_QUANTITY,
+    TITLES,
+    ADDRESSES,
+    PRICE_MIN,
+    PRICE_MAX,
+    TYPES,
+    ROOMS_MAX,
+    GUESTS_MAX,
+    CHECKIN_TIMES,
+    CHECKOUT_TIMES,
+    FEATURES,
+    DESCRIPTIONS,
+    PHOTOS,
+    Y_MIN,
+    Y_MAX,
+    X_MIN,
+    X_MAX,
+    PIN_OFFSET_X,
+    PIN_OFFSET_Y,
+    PIN_MAIN_OFFSET_X,
+    PIN_MAIN_OFFSET_Y,
+    SELECT_ROOMS_MAX_VALUE,
+    PRICE_BUNGALOW_MIN,
+    PRICE_FLAT_MIN,
+    PRICE_HOUSE_MIN,
     pricePalaceMin: PRICE_PALACE_MIN,
     nearbyAds: populateNearbyAds([], PIN_QUANTITY),
     map

@@ -11,7 +11,8 @@
   const timeInAdForm = adForm.querySelector(`#timein`);
   const timeOutAdForm = adForm.querySelector(`#timeout`);
 
-  addressAdForm.value = `${window.data.xMax / 2}, ${window.data.yMax / 2}`;
+  let {x, y} = window.pin.getPinCoordinates(window.pin.pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
+  addressAdForm.value = `${x}, ${y}`;
 
   const setRoomCapacityValidity = function () {
     let rooms = Number(roomNumberAdForm.value);
@@ -19,10 +20,10 @@
     if (rooms < capacity) {
       roomNumberAdForm.setCustomValidity(`Мест для всех не хватит!`);
       capacityAdForm.setCustomValidity(`Мест для всех не хватит!`);
-    } else if ((rooms === window.data.selectRoomsMaxValue) && (capacity !== 0)) {
+    } else if ((rooms === window.data.SELECT_ROOMS_MAX_VALUE) && (capacity !== 0)) {
       roomNumberAdForm.setCustomValidity(`Не для гостей!`);
       capacityAdForm.setCustomValidity(`Не для гостей!`);
-    } else if ((capacity === 0) && (rooms !== window.data.selectRoomsMaxValue)) {
+    } else if ((capacity === 0) && (rooms !== window.data.SELECT_ROOMS_MAX_VALUE)) {
       roomNumberAdForm.setCustomValidity(`Нужно больше комнат!`);
       capacityAdForm.setCustomValidity(`Нужно больше комнат!`);
     } else {
@@ -34,14 +35,14 @@
   const setPriceValidity = function () {
     let type = typeAdForm.value;
     let price = Number(priceAdForm.value);
-    if (type === `bungalow` && (price < window.data.priceBungalowMin)) {
-      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.priceBungalowMin}`);
-    } else if (type === `flat` && (price < window.data.priceFlatMin)) {
-      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.priceFlatMin}`);
-    } else if (type === `house` && (price < window.data.priceHouseMin)) {
-      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.priceHouseMin}`);
-    } else if (type === `palace` && (price < window.data.pricePalaceMin)) {
-      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.pricePalaceMin}`);
+    if (type === `bungalow` && (price < window.data.PRICE_BUNGALOW_MIN)) {
+      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.PRICE_BUNGALOW_MIN}`);
+    } else if (type === `flat` && (price < window.data.PRICE_FLAT_MIN)) {
+      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.PRICE_FLAT_MIN}`);
+    } else if (type === `house` && (price < window.data.PRICE_HOUSE_MIN)) {
+      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.PRICE_HOUSE_MIN}`);
+    } else if (type === `palace` && (price < window.data.PRICE_PALACE_MIN)) {
+      priceAdForm.setCustomValidity(`Минимальная цена за ночь ${window.data.PRICE_PALACE_MIN}`);
     } else {
       priceAdForm.setCustomValidity(``);
     }
