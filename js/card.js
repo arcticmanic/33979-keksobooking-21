@@ -21,7 +21,7 @@
 
       cardTitle.textContent = card.offer.title || window.util.getHide(cardTitle);
       cardAddress.textContent = card.offer.address || window.util.getHide(cardAddress);
-      cardPrice.textContent = (card.offer.price) ? `${card.offer.price}₽/ночь` : window.util.getHide(cardPrice);
+      cardPrice.textContent = (card.offer.price) ? `${card.offer.price} ₽/ночь` : window.util.getHide(cardPrice);
       cardType.textContent = card.offer.type || window.util.getHide(cardType);
       cardCapacity.textContent = (card.offer.rooms && card.offer.guests) ? `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : window.util.getHide(cardCapacity);
       cardTime.textContent = (card.offer.checkin && card.offer.checkout) ? `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}` : window.util.getHide(cardTime);
@@ -46,7 +46,7 @@
 
       cardDescription.textContent = card.offer.description || window.util.getHide(cardDescription);
 
-      if (card.offer.photos) {
+      if (card.offer.photos.length) {
         cardPhoto.src = card.offer.photos[0];
 
         for (let i = 1; i < card.offer.photos.length; i++) {
