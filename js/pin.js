@@ -11,25 +11,31 @@
     };
   };
 
+  const successHandler = function (data) {
+    window.map.insertPins(data);
+    let {x, y} = window.pin.getPinCoordinates(pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
+    window.form.addressAdForm.value = `${x}, ${y}`;
+    pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
+    pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
+  };
+
+  const errorHandler = function (errorMessage) {
+    window.error.showErrorMessage(errorMessage);
+  };
+
   const pinMainMousedownHandler = function (evt) {
     if (evt.button === 0) {
-      window.main.makeProjectActive();
-      window.map.insertPins();
-      let {x, y} = window.pin.getPinCoordinates(pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
-      window.form.addressAdForm.value = `${x}, ${y}`;
-      pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
-      pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
+      window.main.makeProjectActive(function () {
+        window.backend.load(successHandler, errorHandler);
+      });
     }
   };
 
   const pinMainKeydownHandler = function (evt) {
     if (evt.key === `Enter`) {
-      window.main.makeProjectActive();
-      window.map.insertPins();
-      let {x, y} = window.pin.getPinCoordinates(pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
-      window.form.addressAdForm.value = `${x}, ${y}`;
-      pinMain.removeEventListener(`keydown`, pinMainKeydownHandler, false);
-      pinMain.removeEventListener(`mousedown`, pinMainMousedownHandler, false);
+      window.main.makeProjectActive(function () {
+        window.backend.load(successHandler, errorHandler);
+      });
     }
   };
 

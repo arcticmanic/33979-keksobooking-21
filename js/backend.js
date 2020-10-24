@@ -32,20 +32,16 @@
     return xhr;
   };
 
-  const load = function (onLoad, onError) {
-    let xhr = getData(onLoad, onError);
-    xhr.open(`GET`, DATA_URL);
-    xhr.send();
-  };
-
-  const save = function (data, onLoad, onError) {
-    let xhr = getData(onLoad, onError);
-    xhr.open(`POST`, SEND_URL);
-    xhr.send(data);
-  };
-
   window.backend = {
-    save,
-    load
+    save(data, onLoad, onError) {
+      let xhr = getData(onLoad, onError);
+      xhr.open(`POST`, SEND_URL);
+      xhr.send(data);
+    },
+    load(onLoad, onError) {
+      let xhr = getData(onLoad, onError);
+      xhr.open(`GET`, DATA_URL);
+      xhr.send();
+    }
   };
 }());

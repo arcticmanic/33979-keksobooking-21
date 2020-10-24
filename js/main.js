@@ -2,11 +2,12 @@
 
 (function () {
   window.main = {
-    makeProjectActive() {
+    makeProjectActive(callback) {
       window.data.map.classList.remove(`map--faded`);
       window.form.adForm.classList.remove(`ad-form--disabled`);
       window.form.changeFormFieldsStatus(window.form.adForm, false);
       window.form.changeFormFieldsStatus(window.form.filterForm, false);
+      callback();
     },
     makeProjectDisabled() {
       window.data.map.classList.add(`map--faded`);
