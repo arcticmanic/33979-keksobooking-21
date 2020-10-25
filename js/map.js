@@ -28,10 +28,10 @@
         mapCard.parentNode.removeChild(mapCard);
       }
     },
-    insertPins() {
+    insertPins(pins) {
       const fragment = document.createDocumentFragment();
-      for (let i = 0; i < window.data.nearbyAds.length; i++) {
-        fragment.appendChild(window.pin.renderPin(window.data.nearbyAds[i], i));
+      for (let i = 0; i < pins.length; i++) {
+        fragment.appendChild(window.pin.renderPin(pins[i], i));
       }
       pinList.appendChild(fragment);
     }
