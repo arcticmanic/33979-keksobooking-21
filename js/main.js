@@ -9,13 +9,14 @@
       window.form.changeFormFieldsStatus(window.form.filterForm, false);
       callback();
     },
-    makeProjectDisabled() {
+    makeProjectDisabled(callback) {
       window.data.map.classList.add(`map--faded`);
       window.form.adForm.classList.add(`ad-form--disabled`);
       window.form.changeFormFieldsStatus(window.form.adForm, true);
       window.form.changeFormFieldsStatus(window.form.filterForm, true);
+      callback();
     }
   };
 
-  window.main.makeProjectDisabled();
+  window.main.makeProjectDisabled(function () {});
 })();

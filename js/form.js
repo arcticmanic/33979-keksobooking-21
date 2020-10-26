@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  const pageMain = document.querySelector(`main`);
   const adForm = document.querySelector(`.ad-form`);
   const filterForm = document.querySelector(`.map__filters`);
   const addressAdForm = adForm.querySelector(`#address`);
@@ -10,6 +11,8 @@
   const priceAdForm = adForm.querySelector(`#price`);
   const timeInAdForm = adForm.querySelector(`#timein`);
   const timeOutAdForm = adForm.querySelector(`#timeout`);
+  const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 
   let {x, y} = window.pin.getPinCoordinates(window.pin.pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
   addressAdForm.value = `${x}, ${y}`;
@@ -64,11 +67,67 @@
 
   const adFormPriceHandler = function () {
     setPriceValidity();
-    priceAdForm.reportValidity();
+    setRoomCapacityValidity();
+    adForm.reportValidity();
   };
 
+  const formMessageClickHandler = function (evt) {
+    evt.preventDefault();
+    let element = document.querySelector(`.error`) || document.querySelector(`.success`);
+    document.removeEventListener(`keydown`, formMessageEscPressHandler, false);
+    document.removeEventListener(`click`, formMessageClickHandler, false);
+    element.remove();
+  };
+
+  const formMessageEscPressHandler = function (evt) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      let element = document.querySelector(`.error`) || document.querySelector(`.success`);
+      document.removeEventListener(`keydown`, formMessageEscPressHandler, false);
+      document.removeEventListener(`click`, formMessageClickHandler, false);
+      element.remove();
+    }
+  };
+
+  const successHandler = function () {
+    let successElement = successTemplate.cloneNode(true);
+    pageMain.appendChild(successElement);
+    document.addEventListener(`keydown`, formMessageEscPressHandler);
+    document.addEventListener(`click`, formMessageClickHandler);
+    window.main.makeProjectDisabled(function () {
+      let cardList = window.data.map.querySelectorAll(`.map__card`);
+      let pinList = window.data.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+      window.pin.pinMain.addEventListener(`mousedown`, window.pin.pinMainMousedownHandler);
+      window.pin.pinMain.addEventListener(`keydown`, window.pin.pinMainKeydownHandler);
+      window.map.removeElements(cardList);
+      window.map.removeElements(pinList);
+      adForm.reset();
+    });
+  };
+
+  const errorHandler = function (errorMessage) {
+    let errorElement = errorTemplate.cloneNode(true);
+    let errorMessageElement = errorElement.querySelector(`.error__message`);
+    errorMessageElement.textContent = errorMessage;
+    pageMain.appendChild(errorElement);
+    document.addEventListener(`keydown`, formMessageEscPressHandler);
+    document.addEventListener(`click`, formMessageClickHandler);
+  };
+
+  const adFormSubmitHandler = function (evt) {
+    evt.preventDefault();
+    setPriceValidity();
+    setRoomCapacityValidity();
+    priceAdForm.reportValidity();
+    window.backend.save(new FormData(adForm), successHandler, errorHandler);
+  };
+
+  addressAdForm.addEventListener(`keypress`, function (evt) {
+    evt.preventDefault();
+  });
   priceAdForm.addEventListener(`input`, adFormPriceHandler);
   adForm.addEventListener(`change`, adFormChangeHandler);
+  adForm.addEventListener(`submit`, adFormSubmitHandler);
 
   window.form = {
     adForm,

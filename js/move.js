@@ -38,10 +38,10 @@
           }
 
           let top = target.offsetTop - shift.y;
-          if (target.offsetTop - shift.y < window.data.Y_MIN) {
-            top = window.data.Y_MIN;
-          } else if (target.offsetTop + target.offsetHeight - shift.y > window.data.Y_MAX) {
-            top = window.data.Y_MAX - target.offsetHeight;
+          if (target.offsetTop - shift.y < window.data.Y_MIN - window.data.PIN_MAIN_OFFSET_Y) {
+            top = window.data.Y_MIN - window.data.PIN_MAIN_OFFSET_Y;
+          } else if (target.offsetTop + window.data.PIN_MAIN_OFFSET_Y - shift.y > window.data.Y_MAX) {
+            top = window.data.Y_MAX - window.data.PIN_MAIN_OFFSET_Y;
           }
 
           target.style.left = left + `px`;

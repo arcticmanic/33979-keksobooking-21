@@ -992,6 +992,14 @@ fieldset {
   background-color: #ffffff;
 }
 
+.popup {
+  display: none;
+}
+
+.popup--show {
+  display: block;
+}
+
 .popup__avatar {
   position: absolute;
   bottom: 100%;
