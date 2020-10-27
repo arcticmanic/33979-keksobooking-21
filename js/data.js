@@ -14,6 +14,12 @@
   const PRICE_FLAT_MIN = 1000;
   const PRICE_HOUSE_MIN = 5000;
   const PRICE_PALACE_MIN = 10000;
+  const TYPES = {
+    'palace': `Дворец`,
+    'flat': `Квартира`,
+    'house': `Дом`,
+    'bungalow': `Бунгало`
+  };
   const map = document.querySelector(`.map`);
 
   window.data = {
@@ -30,6 +36,7 @@
     PRICE_FLAT_MIN,
     PRICE_HOUSE_MIN,
     PRICE_PALACE_MIN,
+    TYPES,
     map
   };
 })();

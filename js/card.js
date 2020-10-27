@@ -22,7 +22,7 @@
       cardTitle.textContent = card.offer.title || window.util.getHide(cardTitle);
       cardAddress.textContent = card.offer.address || window.util.getHide(cardAddress);
       cardPrice.textContent = (card.offer.price) ? `${card.offer.price} ₽/ночь` : window.util.getHide(cardPrice);
-      cardType.textContent = card.offer.type || window.util.getHide(cardType);
+      cardType.textContent = window.data.TYPES[card.offer.type] || window.util.getHide(cardType);
       cardCapacity.textContent = (card.offer.rooms && card.offer.guests) ? `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : window.util.getHide(cardCapacity);
       cardTime.textContent = (card.offer.checkin && card.offer.checkout) ? `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}` : window.util.getHide(cardTime);
 

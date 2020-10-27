@@ -5,35 +5,53 @@
   const pinList = window.data.map.querySelector(`.map__pins`);
 
   window.map = {
+    openPopup(popup) {
+      popup.classList.add(`popup--show`);
+      document.addEventListener(`keydown`, this.popupEscPressHandler);
+    },
     closePopup(popup) {
-      popup.remove();
+      popup.classList.remove(`popup--show`);
       document.removeEventListener(`keydown`, this.popupEscPressHandler);
     },
     popupEscPressHandler(evt) {
-      let popup = document.querySelector(`.map__card`);
+      let popupList = document.querySelectorAll(`.popup`);
       if (evt.key === `Escape`) {
         evt.preventDefault();
-        window.map.closePopup(popup);
+        for (let i = 0; i < popupList.length; i++) {
+          window.map.closePopup(popupList[i]);
+        }
       }
     },
-    insertCard(index) {
+    insertCard(data) {
       const fragment = document.createDocumentFragment();
-      fragment.appendChild(window.card.renderCard(window.data.nearbyAds[index]));
+      fragment.appendChild(window.card.renderCard(data));
       window.data.map.insertBefore(fragment, filters);
     },
-    clearCards() {
+    hideCards() {
       let mapCards = window.data.map.querySelectorAll(`.map__card`);
       for (let i = mapCards.length - 1; i >= 0; i--) {
         let mapCard = mapCards[i];
-        mapCard.parentNode.removeChild(mapCard);
+        mapCard.classList.remove(`popup--show`);
+      }
+    },
+    insertCards(data) {
+      for (let i = 0; i < data.length; i++) {
+        window.map.insertCard(data[i]);
       }
     },
     insertPins(pins) {
       const fragment = document.createDocumentFragment();
       for (let i = 0; i < pins.length; i++) {
-        fragment.appendChild(window.pin.renderPin(pins[i], i));
+        if (pins[i].hasOwnProperty(`offer`)) {
+          fragment.appendChild(window.pin.renderPin(pins[i], i));
+        }
       }
       pinList.appendChild(fragment);
+    },
+    removeElements(elements) {
+      for (let i = elements.length - 1; i >= 0; i--) {
+        elements[i].remove();
+      }
     }
   };
 })();
