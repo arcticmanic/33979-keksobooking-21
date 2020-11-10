@@ -3,7 +3,6 @@
 (function () {
   const pageMain = document.querySelector(`main`);
   const adForm = document.querySelector(`.ad-form`);
-  const filterForm = document.querySelector(`.map__filters`);
   const addressAdForm = adForm.querySelector(`#address`);
   const roomNumberAdForm = adForm.querySelector(`#room_number`);
   const capacityAdForm = adForm.querySelector(`#capacity`);
@@ -131,7 +130,6 @@
 
   window.form = {
     adForm,
-    filterForm,
     addressAdForm,
     changeFormFieldsStatus(form, isDisabled) {
       let fields = form.children;

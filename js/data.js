@@ -14,6 +14,7 @@
   const PRICE_FLAT_MIN = 1000;
   const PRICE_HOUSE_MIN = 5000;
   const PRICE_PALACE_MIN = 10000;
+  const MAX_SIMILAR_PINS_COUNT = 5;
   const TYPES = {
     'palace': `Дворец`,
     'flat': `Квартира`,
@@ -36,6 +37,7 @@
     PRICE_FLAT_MIN,
     PRICE_HOUSE_MIN,
     PRICE_PALACE_MIN,
+    MAX_SIMILAR_PINS_COUNT,
     TYPES,
     map
   };
