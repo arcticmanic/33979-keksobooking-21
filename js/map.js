@@ -34,19 +34,19 @@
         mapCard.classList.remove(`popup--show`);
       }
     },
-    insertCards(data) {
-      for (let i = 0; i < data.length; i++) {
-        window.map.insertCard(data[i]);
+    removeCards() {
+      let mapCards = window.data.map.querySelectorAll(`.map__card`);
+      for (let i = mapCards.length - 1; i >= 0; i--) {
+        mapCards[i].remove();
       }
     },
-    insertPins(pins) {
-      const fragment = document.createDocumentFragment();
-      for (let i = 0; i < pins.length; i++) {
-        if (pins[i].hasOwnProperty(`offer`)) {
-          fragment.appendChild(window.pin.renderPin(pins[i], i));
+    removePins() {
+      let mapPins = pinList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+      if (mapPins) {
+        for (let i = mapPins.length - 1; i >= 0; i--) {
+          mapPins[i].remove();
         }
       }
-      pinList.appendChild(fragment);
     },
     removeElements(elements) {
       for (let i = elements.length - 1; i >= 0; i--) {
