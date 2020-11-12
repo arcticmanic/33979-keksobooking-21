@@ -22,17 +22,17 @@
     switch (data.price) {
       case `middle`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.price >= 10000) && (pin.offer.price <= 50000);
+          return (pin.offer.price >= window.data.FILTER_PRICE_STEP_ONE) && (pin.offer.price <= window.data.FILTER_PRICE_STEP_TWO);
         });
         break;
       case `low`:
         updatedPins = updatedPins.filter(function (pin) {
-          return pin.offer.price < 10000;
+          return pin.offer.price < window.data.FILTER_PRICE_STEP_ONE;
         });
         break;
       case `high`:
         updatedPins = updatedPins.filter(function (pin) {
-          return pin.offer.price > 50000;
+          return pin.offer.price > window.data.FILTER_PRICE_STEP_TWO;
         });
         break;
     }
@@ -40,17 +40,17 @@
     switch (data.rooms) {
       case `1`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.rooms === 1);
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_ONE);
         });
         break;
       case `2`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.rooms === 2);
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_TWO);
         });
         break;
       case `3`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.rooms === 3);
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_THREE);
         });
         break;
     }
@@ -58,17 +58,17 @@
     switch (data.guests) {
       case `0`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.guests === 0);
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_ONE);
         });
         break;
       case `1`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.guests === 1);
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_TWO);
         });
         break;
       case `2`:
         updatedPins = updatedPins.filter(function (pin) {
-          return (pin.offer.guests === 2);
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_THREE);
         });
         break;
     }
