@@ -60,6 +60,10 @@
         x,
         y
       };
+    },
+    setPinCoordinates(pin, x, y, offsetX, offsetY) {
+      pin.style.left = `${x - offsetX}px`;
+      pin.style.top = `${y - offsetY}px`;
     }
   };
 }());

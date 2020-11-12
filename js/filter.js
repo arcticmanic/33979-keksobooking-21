@@ -2,23 +2,34 @@
 
 (function () {
   let filter = {
-    filterTypeChangeHandler() {}
+    data: {},
+    filterFormChangeHandler() {}
   };
 
   const filterForm = document.querySelector(`.map__filters`);
 
-  const filterFormChangeHandler = function (evt) {
-    if (evt.target && (evt.target.matches(`#housing-type`))) {
-      filter.filterTypeChangeHandler(evt.target.value);
-    }
+  const filterFormChangeHandler = function () {
+    const featuresList = filterForm.querySelectorAll(`.map__checkbox`);
+
+    filter.data.type = filterForm.querySelector(`#housing-type`).value;
+    filter.data.price = filterForm.querySelector(`#housing-price`).value;
+    filter.data.rooms = filterForm.querySelector(`#housing-rooms`).value;
+    filter.data.guests = filterForm.querySelector(`#housing-guests`).value;
+    filter.data.features = Array.from(featuresList).filter(function (feature) {
+      return feature.checked;
+    }).map(function (feature) {
+      return feature.value;
+    });
+
+    filter.filterFormChangeHandler(filter.data);
   };
 
   filterForm.addEventListener(`change`, filterFormChangeHandler);
 
   window.filter = {
     filterForm,
-    setTypeChangeHandler(cb) {
-      filter.filterTypeChangeHandler = cb;
+    setFormChangeHandler(cb) {
+      filter.filterFormChangeHandler = cb;
     }
   };
 }());

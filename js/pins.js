@@ -10,15 +10,77 @@
     window.render(data);
   };
 
-  window.filter.setTypeChangeHandler(function (type) {
-    if (type !== `any`) {
-      updatePins(pins.filter(function (pin) {
-        return pin.offer.type === type;
-      }));
-    } else {
-      updatePins(pins);
+  window.filter.setFormChangeHandler(window.debounce(function (data) {
+    let updatedPins = pins;
+
+    if (data.type !== `any`) {
+      updatedPins = pins.filter(function (pin) {
+        return pin.offer.type === data.type;
+      });
     }
-  });
+
+    switch (data.price) {
+      case `middle`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.price >= window.data.FILTER_PRICE_STEP_ONE) && (pin.offer.price <= window.data.FILTER_PRICE_STEP_TWO);
+        });
+        break;
+      case `low`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return pin.offer.price < window.data.FILTER_PRICE_STEP_ONE;
+        });
+        break;
+      case `high`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return pin.offer.price > window.data.FILTER_PRICE_STEP_TWO;
+        });
+        break;
+    }
+
+    switch (data.rooms) {
+      case `1`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_ONE);
+        });
+        break;
+      case `2`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_TWO);
+        });
+        break;
+      case `3`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.rooms === window.data.FILTER_ROOMS_STEP_THREE);
+        });
+        break;
+    }
+
+    switch (data.guests) {
+      case `0`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_ONE);
+        });
+        break;
+      case `1`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_TWO);
+        });
+        break;
+      case `2`:
+        updatedPins = updatedPins.filter(function (pin) {
+          return (pin.offer.guests === window.data.FILTER_GUESTS_STEP_THREE);
+        });
+        break;
+    }
+
+    updatedPins = updatedPins.filter(function (pin) {
+      return data.features.every(function (feature) {
+        return pin.offer.features.includes(feature);
+      });
+    });
+
+    updatePins(updatedPins);
+  }));
 
   const successHandler = function (data) {
     pins = data;

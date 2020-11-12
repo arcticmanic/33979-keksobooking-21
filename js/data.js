@@ -21,6 +21,14 @@
     'house': `Дом`,
     'bungalow': `Бунгало`
   };
+  const FILTER_PRICE_STEP_ONE = 10000;
+  const FILTER_PRICE_STEP_TWO = 50000;
+  const FILTER_ROOMS_STEP_ONE = 1;
+  const FILTER_ROOMS_STEP_TWO = 2;
+  const FILTER_ROOMS_STEP_THREE = 3;
+  const FILTER_GUESTS_STEP_ONE = 0;
+  const FILTER_GUESTS_STEP_TWO = 1;
+  const FILTER_GUESTS_STEP_THREE = 2;
   const map = document.querySelector(`.map`);
 
   window.data = {
@@ -39,6 +47,14 @@
     PRICE_PALACE_MIN,
     MAX_SIMILAR_PINS_COUNT,
     TYPES,
+    FILTER_PRICE_STEP_ONE,
+    FILTER_PRICE_STEP_TWO,
+    FILTER_ROOMS_STEP_ONE,
+    FILTER_ROOMS_STEP_TWO,
+    FILTER_ROOMS_STEP_THREE,
+    FILTER_GUESTS_STEP_ONE,
+    FILTER_GUESTS_STEP_TWO,
+    FILTER_GUESTS_STEP_THREE,
     map
   };
 })();

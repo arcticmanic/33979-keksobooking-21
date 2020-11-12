@@ -12,6 +12,7 @@
   const timeOutAdForm = adForm.querySelector(`#timeout`);
   const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const adFormReset = adForm.querySelector(`.ad-form__reset`);
 
   let {x, y} = window.pin.getPinCoordinates(window.pin.pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
   addressAdForm.value = `${x}, ${y}`;
@@ -67,7 +68,7 @@
   const adFormPriceHandler = function () {
     setPriceValidity();
     setRoomCapacityValidity();
-    adForm.reportValidity();
+    priceAdForm.reportValidity();
   };
 
   const formMessageClickHandler = function (evt) {
@@ -88,19 +89,22 @@
     }
   };
 
+  const resetData = function () {
+    window.map.removePins();
+    window.map.removeCards();
+    adForm.reset();
+    window.filter.filterForm.reset();
+  };
+
   const successHandler = function () {
     let successElement = successTemplate.cloneNode(true);
     pageMain.appendChild(successElement);
     document.addEventListener(`keydown`, formMessageEscPressHandler);
     document.addEventListener(`click`, formMessageClickHandler);
+    resetData();
     window.main.makeProjectDisabled(function () {
-      let cardList = window.data.map.querySelectorAll(`.map__card`);
-      let pinList = window.data.map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
       window.pin.pinMain.addEventListener(`mousedown`, window.pin.pinMainMousedownHandler);
       window.pin.pinMain.addEventListener(`keydown`, window.pin.pinMainKeydownHandler);
-      window.map.removeElements(cardList);
-      window.map.removeElements(pinList);
-      adForm.reset();
     });
   };
 
@@ -121,12 +125,22 @@
     window.backend.save(new FormData(adForm), successHandler, errorHandler);
   };
 
+  const adFormResetHandler = function (evt) {
+    evt.preventDefault();
+    resetData();
+    window.main.makeProjectDisabled(function () {
+      window.pin.pinMain.addEventListener(`mousedown`, window.pin.pinMainMousedownHandler);
+      window.pin.pinMain.addEventListener(`keydown`, window.pin.pinMainKeydownHandler);
+    });
+  };
+
   addressAdForm.addEventListener(`keypress`, function (evt) {
     evt.preventDefault();
   });
   priceAdForm.addEventListener(`input`, adFormPriceHandler);
   adForm.addEventListener(`change`, adFormChangeHandler);
   adForm.addEventListener(`submit`, adFormSubmitHandler);
+  adFormReset.addEventListener(`click`, adFormResetHandler);
 
   window.form = {
     adForm,
