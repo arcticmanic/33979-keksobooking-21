@@ -44,6 +44,7 @@ const FILTER_ROOMS_STEP_THREE = 3;
 const FILTER_GUESTS_STEP_ONE = 0;
 const FILTER_GUESTS_STEP_TWO = 1;
 const FILTER_GUESTS_STEP_THREE = 2;
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 const map = document.querySelector(`.map`);
 
 window.data = {
@@ -73,5 +74,6 @@ window.data = {
   FILTER_ROOMS,
   FILTER_GUESTS,
   FILTER_PRICES,
+  FILE_TYPES,
   map
 };

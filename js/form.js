@@ -12,6 +12,10 @@ const timeOutAdForm = adForm.querySelector(`#timeout`);
 const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 const adFormReset = adForm.querySelector(`.ad-form__reset`);
+const avatarUploadAdFrom = adForm.querySelector(`.ad-form-header__input[type=file]`);
+const avatarPreviewAdFrom = adForm.querySelector(`.ad-form-header__preview img`);
+const photoUploadAdFrom = adForm.querySelector(`.ad-form__input[type=file]`);
+const photoPreviewAdFrom = adForm.querySelector(`.ad-form__photo`);
 
 let {x, y} = window.pin.getPinCoordinates(window.pin.pinMain, window.data.PIN_MAIN_OFFSET_X, window.data.PIN_MAIN_OFFSET_Y);
 addressAdForm.value = `${x}, ${y}`;
@@ -140,6 +144,47 @@ priceAdForm.addEventListener(`input`, adFormPriceHandler);
 adForm.addEventListener(`change`, adFormChangeHandler);
 adForm.addEventListener(`submit`, adFormSubmitHandler);
 adFormReset.addEventListener(`click`, adFormResetHandler);
+
+avatarUploadAdFrom.addEventListener(`change`, () => {
+  let file = avatarUploadAdFrom.files[0];
+  let fileName = file.name.toLowerCase();
+
+  let matches = window.data.FILE_TYPES.some((it) => {
+    return fileName.endsWith(it);
+  });
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener(`load`, () => {
+      avatarPreviewAdFrom.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  }
+});
+
+photoUploadAdFrom.addEventListener(`change`, () => {
+  let file = photoUploadAdFrom.files[0];
+  let fileName = file.name.toLowerCase();
+  let imgNode = document.createElement(`img`);
+  imgNode.style = `display: block; margin: 0 auto; max-width: 100%; height: 100%;`;
+
+  let matches = window.data.FILE_TYPES.some((it) => {
+    return fileName.endsWith(it);
+  });
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener(`load`, () => {
+      imgNode.src = reader.result;
+      photoPreviewAdFrom.insertAdjacentElement(`afterbegin`, imgNode);
+    });
+
+    reader.readAsDataURL(file);
+  }
+});
 
 window.form = {
   adForm,
